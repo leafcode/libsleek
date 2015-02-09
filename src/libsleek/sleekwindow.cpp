@@ -76,7 +76,7 @@ void SleekWindow::centerPrimaryScreen()
 void SleekWindow::centerParent()
 {
     if (_parenthWnd == 0)
-        return FALSE;
+        return;
 
     RECT rectParent;
     GetWindowRect(_parenthWnd, &rectParent);
