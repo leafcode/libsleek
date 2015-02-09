@@ -3,3 +3,6 @@ sleek is a multiplatform window framework using the Qt application framework tha
 
 Screenshot of the sample application running on Windows.
 ![Example](https://raw.githubusercontent.com/leafcode/libsleek/master/screens/sleek.png)
+
+Screenshot of the sample application running on Elementary OS.
+![Example](https://raw.githubusercontent.com/leafcode/libsleek/master/screens/sleekelementary.png)
