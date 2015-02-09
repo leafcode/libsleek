@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/header/Close.png</file>
+        <file>icons/header/CloseHover.png</file>
+        <file>icons/header/Maximize.png</file>
+        <file>icons/header/MaximizeHover.png</file>
+        <file>icons/header/Minimize.png</file>
+        <file>icons/header/MinimizeHover.png</file>
+        <file>icons/header/Restore.png</file>
+        <file>icons/header/RestoreHover.png</file>
+        <file>themes/graphite.css</file>
+    </qresource>
+</RCC>

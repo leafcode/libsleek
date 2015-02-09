@@ -1,0 +1,12 @@
+#ifndef LEAFWINDOW_GLOBAL_H
+#define LEAFWINDOW_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(LIBSLEEK_LIBRARY)
+#  define LIBSLEEKSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define LIBSLEEKSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // LEAFWINDOW_GLOBAL_H
