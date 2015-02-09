@@ -65,15 +65,15 @@ SleekWindow::~SleekWindow()
     DestroyWindow( _hWnd );
 }
 
-bool SleekWindow::centerPrimaryScreen()
+void SleekWindow::centerPrimaryScreen()
 {
     int xPos = (GetSystemMetrics(SM_CXSCREEN) - getMainPanel()->width())/2;
     int yPos = (GetSystemMetrics(SM_CYSCREEN) - getMainPanel()->height())/2;
 
-    return SetWindowPos( _hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE );
+    SetWindowPos( _hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE );
 }
 
-bool SleekWindow::centerParent()
+void SleekWindow::centerParent()
 {
     if (_parenthWnd == 0)
         return FALSE;
@@ -108,7 +108,7 @@ bool SleekWindow::centerParent()
     if (x + width > screenWidth) x = screenWidth - width;
     if (y + height > screenHeight) y = screenHeight - height;
 
-    return SetWindowPos( _hWnd, 0, x, y, 0, 0, SWP_FRAMECHANGED | SWP_NOSIZE );
+    SetWindowPos( _hWnd, 0, x, y, 0, 0, SWP_FRAMECHANGED | SWP_NOSIZE );
 }
 
 HWND SleekWindow::getHandle()
@@ -303,12 +303,18 @@ SleekBorderless* SleekWindow::getSleekBorderless()
 
 
 #else
-SleekWindow::SleekWindow(QApplication *app, QString title, QWidget *parent) :
-    _mainPanel(new QWidget(parent))
+SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
+    _mainPanel(new QWidget())
 {
     Q_UNUSED(title);
+    Q_UNUSED(parent); //Should be used for modal window...
 
-    this->app = app;
+    //if (parent)
+    //    _mainPanel = new QWidget(parent->getMainPanel());
+    //else
+    //    _mainPanel = new QWidget();
+
+    this->_app = app;
     _mainPanel->setObjectName("mainPanel");
 }
 
@@ -344,14 +350,14 @@ void SleekWindow::setMaximumSize(const int width, const int height)
 
 void SleekWindow::centerParent()
 {
-    move(parentWidget()->window()->frameGeometry().topLeft() +
-        parentWidget()->window()->rect().center() -
-        rect().center());
+    _mainPanel->move(_mainPanel->window()->frameGeometry().topLeft() +
+        _mainPanel->window()->rect().center() -
+        _mainPanel->window()->rect().center());
 }
 
 void SleekWindow::centerPrimaryScreen()
 {
-    move(QApplication::desktop()->screen()->rect().center() - widget.rect().center());
+    _mainPanel->move(QApplication::desktop()->screen()->rect().center() - _mainPanel->rect().center());
 }
 
 #endif

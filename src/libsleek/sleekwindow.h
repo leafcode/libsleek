@@ -1,6 +1,8 @@
 #ifndef SLEEKWINDOW_H
 #define SLEEKWINDOW_H
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QWidget>
 #include <QObject>
 #include "sleekwindow_global.h"
@@ -54,8 +56,8 @@ public:
     bool getBorderless();
     bool getBorderlessResizable();
 
-    bool centerPrimaryScreen();
-    bool centerParent();
+    void centerPrimaryScreen();
+    void centerParent();
 
     SleekBorderless* getSleekBorderless();
     HWND getHandle();
@@ -91,12 +93,12 @@ private:
 
 #else
 
-class SLEEKWINDOWSHARED_EXPORT SleekWindow : public QObject
+class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
 {
     Q_OBJECT
 
 public:
-    SleekWindow(QApplication *app, QString title, QWidget *parent = 0);
+    SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
     ~SleekWindow();
 
     QWidget* getMainPanel();
@@ -105,11 +107,11 @@ public:
     void toggleResizeable();
     void setMinimumSize(const int width, const int height);
     void setMaximumSize(const int width, const int height);
-    bool centerPrimaryScreen();
-    bool centerParent();
+    void centerPrimaryScreen();
+    void centerParent();
 
 protected:
-    QApplication* app;
+    QApplication* _app;
 
 private:
     QWidget* _mainPanel;
