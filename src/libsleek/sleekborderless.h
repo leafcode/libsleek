@@ -1,5 +1,5 @@
-#ifndef LEAFBORDERLESS_H
-#define LEAFBORDERLESS_H
+#ifndef SLEEKBORDERLESS_H
+#define SLEEKBORDERLESS_H
 
 #include <QMouseEvent>
 #include <QGridLayout>
@@ -34,4 +34,4 @@ protected:
     //QLabel _windowTitle;
 };
 
-#endif // LEAFBORDERLESS_H
+#endif // SLEEKBORDERLESS_H

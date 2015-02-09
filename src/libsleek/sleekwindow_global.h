@@ -1,5 +1,5 @@
-#ifndef LEAFWINDOW_GLOBAL_H
-#define LEAFWINDOW_GLOBAL_H
+#ifndef SLEEKWINDOW_GLOBAL_H
+#define SLEEKWINDOW_GLOBAL_H
 
 #include <QtCore/qglobal.h>
 
@@ -9,4 +9,4 @@
 #  define LIBSLEEKSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // LEAFWINDOW_GLOBAL_H
+#endif // SLEEKWINDOW_GLOBAL_H

@@ -29,7 +29,7 @@ SleekWindowClass::SleekWindowClass() :
     wcx.lpfnWndProc = WndProc;
     wcx.cbClsExtra	= 0;
     wcx.cbWndExtra	= 0;
-    wcx.lpszClassName = L"LeafWindowClass";
+    wcx.lpszClassName = L"SleekWindowClass";
 
     if (theme == "graphite")
         wcx.hbrBackground = _graphiteBrush;

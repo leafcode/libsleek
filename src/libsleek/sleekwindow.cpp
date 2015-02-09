@@ -43,7 +43,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
         _parenthWnd = parent->getHandle();
     }
 
-    _hWnd = CreateWindow( L"LeafWindowClass", title.toStdWString().c_str(), static_cast<DWORD>( Style::windowed ), 0, 0, 0, 0, _parenthWnd, 0, sleekWindow->getHInstance(), nullptr );
+    _hWnd = CreateWindow( L"SleekWindowClass", title.toStdWString().c_str(), static_cast<DWORD>( Style::windowed ), 0, 0, 0, 0, _parenthWnd, 0, sleekWindow->getHInstance(), nullptr );
 
     if ( !_hWnd ) throw std::runtime_error( "Create window failed." );
 
