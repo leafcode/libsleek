@@ -1,6 +1,5 @@
 #include "sleekwindowclass.h"
 #include "sleekwindow.h"
-#include "sleekwindowclasssingleton.h"
 #include "windowsx.h"
 
 #include <QPushButton>
@@ -14,12 +13,7 @@ SleekWindowClass::SleekWindowClass() :
     _graphiteBrush(CreateSolidBrush(RGB(51,51,51))),
     _hInstance( GetModuleHandle( NULL ) )
 {
-    HMODULE hModule = GetModuleHandleW(NULL);
-    WCHAR path[MAX_PATH];
-    GetModuleFileNameW(hModule, path, MAX_PATH);
-    QString pathString = QString::fromWCharArray(path);
-    QFileInfo fileInfo(pathString);
-    QSettings settings(fileInfo.absolutePath() + "/settings.ini", QSettings::IniFormat);
+    QSettings settings(QApplication::applicationDirPath() + "/settings.ini", QSettings::IniFormat);
     QString theme = settings.value("theme").toString();
 
     WNDCLASSEX wcx = { 0 };
@@ -43,15 +37,13 @@ SleekWindowClass::SleekWindowClass() :
     wcx.hIcon = LoadIcon(_hInstance, L"IDI_ICON1");
     RegisterClassEx( &wcx );
     if ( FAILED( RegisterClassEx( &wcx ) ) ) throw std::runtime_error( "Couldn't register window class" );
-
-    //_bgBrush = &wcx.hbrBackground;
 }
 
 SleekWindowClass::~SleekWindowClass()
 {
     DeleteObject(_graphiteBrush);
     DeleteObject(_ivoryBrush);
-    UnregisterClass(L"ArchWindowClass", _hInstance);
+    UnregisterClass(L"SleekWindowClass", _hInstance);
 }
 
 void SleekWindowClass::setBackgroundBrush(HWND hWnd, QString theme)
@@ -60,7 +52,6 @@ void SleekWindowClass::setBackgroundBrush(HWND hWnd, QString theme)
         SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND , (LONG)_graphiteBrush);
     else if (theme == "ivory")
         SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND , (LONG)_ivoryBrush);
-
 }
 
 HINSTANCE SleekWindowClass::getHInstance()

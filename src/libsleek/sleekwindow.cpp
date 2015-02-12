@@ -9,8 +9,6 @@
 #include <QWindow>
 #include <QApplication>
 #include "sleekwindowclass.h"
-#include "sleekwindowclasssingleton.h"
-
 SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
     _mainPanel(new QWidget),
     _parenthWnd(0),
@@ -23,27 +21,19 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
     _isFirstTime ( true )
 {
     _mainPanel->setStyleSheet("border:none;");
-//    WNDCLASSEX wcx = { 0 };
-//    wcx.cbSize = sizeof( WNDCLASSEX );
-//    wcx.style = CS_HREDRAW | CS_VREDRAW;
-//    wcx.hInstance = hInstance;
-//    wcx.lpfnWndProc = WndProc;
-//    wcx.cbClsExtra	= 0;
-//    wcx.cbWndExtra	= 0;
-//    wcx.lpszClassName = L"WindowClass";
-//    wcx.hbrBackground = CreateSolidBrush( RGB( 51, 51, 51 ) );
-//    wcx.hCursor = LoadCursor( hInstance, IDC_ARROW );
-//    RegisterClassEx( &wcx );
-//    if ( FAILED( RegisterClassEx( &wcx ) ) ) throw std::runtime_error( "Couldn't register window class" );
-
-    SleekWindowClass* sleekWindow = SleekWindowClassSingleton::getInstance();
 
     if (parent)
-    {
         _parenthWnd = parent->getHandle();
-    }
 
-    _hWnd = CreateWindow( L"SleekWindowClass", title.toStdWString().c_str(), static_cast<DWORD>( Style::windowed ), 0, 0, 0, 0, _parenthWnd, 0, sleekWindow->getHInstance(), nullptr );
+    _hWnd = CreateWindow(
+                L"SleekWindowClass",
+                title.toStdWString().c_str(),
+                static_cast<DWORD>( Style::windowed ),
+                0, 0, 0, 0,
+                _parenthWnd,
+                0,
+                SleekWindowClass::Instance().getHInstance(),
+                nullptr );
 
     if ( !_hWnd ) throw std::runtime_error( "Create window failed." );
 

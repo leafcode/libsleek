@@ -15,12 +15,10 @@ win32 {
 LIBS += gdi32.lib dwmapi.lib
 
 SOURCES += qwinwidget.cpp \
-    sleekwindowclasssingleton.cpp \
     sleekwindowclass.cpp \
     sleekborderless.cpp
 
 HEADERS += qwinwidget.h \
-    sleekwindowclasssingleton.h \
     sleekwindowclass.h \
     sleekwindow_global.h \
     sleekborderless.h
