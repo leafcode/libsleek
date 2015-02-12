@@ -6,5 +6,5 @@ before_install:
 
 script:
  - qmake -project
- - qmake SleekSample.pro
+ - qmake libsleek.pro
  - make
