@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QDebug>
 
 SleekWindowClass::SleekWindowClass() :
     _ivoryBrush(CreateSolidBrush(RGB(226,226,226))),

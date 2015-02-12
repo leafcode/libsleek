@@ -6,7 +6,6 @@
 #include <windowsx.h>
 #include <windows.h>
 #include <QWindow>
-#include <QDebug>
 
 SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWnd),
     _titleWidget(this),
@@ -167,28 +166,24 @@ bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result) 
             //left border
             if (x >= winrect.left && x < winrect.left + border_width)
             {
-                //*result = HTLEFT;
                 *result  = HTTRANSPARENT;
                 return true;
             }
             //right border
             if (x < winrect.right && x >= winrect.right - border_width)
             {
-                //*result = HTRIGHT;
                 *result  = HTTRANSPARENT;
                 return true;
             }
             //bottom border
             if (y < winrect.bottom && y >= winrect.bottom - border_width)
             {
-                //*result = HTBOTTOM;
                 *result  = HTTRANSPARENT;
                 return true;
             }
             //top border
             if (y >= winrect.top && y < winrect.top + border_width)
             {
-                //*result = HTTOP;
                 *result  = HTTRANSPARENT;
                 return true;
             }
