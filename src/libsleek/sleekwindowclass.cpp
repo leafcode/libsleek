@@ -3,7 +3,6 @@
 #include "windowsx.h"
 
 #include <QPushButton>
-#include <QDebug>
 #include <QSettings>
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -146,68 +145,54 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
         {
             if ( win->getBorderlessResizable() )
             {
-                //qDebug() << "WINAPI:" << message;
                 const LONG borderWidth = 5; //in pixels
                 RECT winrect;
-                //GetWindowRect((HWND)window->winId(), &winrect);
                 GetWindowRect(hWnd, &winrect);
-                //GetWindowRect((HWND)win->getArchBorderless()->winId(), &winrect );
                 long x = GET_X_LPARAM( lParam );
                 long y = GET_Y_LPARAM( lParam );
-                //qDebug() << "X:" << x << "Y:" << y;
-                //qDebug() << "Left:" << winrect.left << "Top:" << winrect.top;
-                //qDebug() << "Right:" << winrect.right << "Bottom:" << winrect.bottom;
 
                 //bottom left corner
                 if ( x >= winrect.left && x < winrect.left + borderWidth + 6 &&
                      y < winrect.bottom && y >= winrect.bottom - borderWidth - 6 )
                 {
-                    //qDebug() << "BOTTOM LEFT";
                     return HTBOTTOMLEFT;
                 }
                 //bottom right corner
                 if ( x < winrect.right && x >= winrect.right - borderWidth - 6 &&
                      y < winrect.bottom && y >= winrect.bottom - borderWidth - 6 )
                 {
-                    //qDebug() << "BOTTOM RIGHT";
                     return HTBOTTOMRIGHT;
                 }
                 //top left corner
                 if ( x >= winrect.left && x < winrect.left + borderWidth + 6 &&
                      y >= winrect.top && y < winrect.top + borderWidth + 6 )
                 {
-                    //qDebug() << "TOP LEFT";
                     return HTTOPLEFT;
                 }
                 //top right corner
                 if ( x < winrect.right && x >= winrect.right - borderWidth - 6 &&
                      y >= winrect.top && y < winrect.top + borderWidth + 6 )
                 {
-                    //qDebug() << "TOP RIGHT";
                     return HTTOPRIGHT;
                 }
                 //left border
                 if ( x >= winrect.left && x < winrect.left + borderWidth )
                 {
-                    //qDebug() << "LEFT";
                     return HTLEFT;
                 }
                 //right border
                 if ( x < winrect.right && x >= winrect.right - borderWidth )
                 {
-                    //qDebug() << "RIGHT";
                     return HTRIGHT;
                 }
                 //bottom border
                 if ( y < winrect.bottom && y >= winrect.bottom - borderWidth )
                 {
-                    //qDebug() << "BOTTOM";
                     return HTBOTTOM;
                 }
                 //top border
                 if ( y >= winrect.top && y < winrect.top + borderWidth )
                 {
-                    //qDebug() << "TOP";
                     return HTTOP;
                 }
             }

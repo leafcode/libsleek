@@ -80,8 +80,6 @@ void QWinWidget::init()
         SetWindowLong((HWND)winId(), GWL_STYLE, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
         QWindow *window = windowHandle();
         window->setProperty("_q_embedded_native_parent_handle", (WId)_hParent);
-        //HWND h = static_cast<HWND>(QGuiApplication::platformNativeInterface()->
-        //                        nativeResourceForWindow("handle", window));
 
         SetParent((HWND)winId(), _hParent);
         window->setFlags(Qt::FramelessWindowHint);
