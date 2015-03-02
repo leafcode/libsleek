@@ -1,5 +1,5 @@
-#ifndef SLEEKWINDOW_GLOBAL_H
-#define SLEEKWINDOW_GLOBAL_H
+#ifndef LIBSLEEK_GLOBAL_H
+#define LIBSLEEK_GLOBAL_H
 
 #include <QtCore/qglobal.h>
 
@@ -9,4 +9,4 @@
 #  define LIBSLEEKSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // SLEEKWINDOW_GLOBAL_H
+#endif // LIBSLEEK_GLOBAL_H

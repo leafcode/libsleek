@@ -27,7 +27,6 @@ SOURCES += qwinwidget.cpp \
 
 HEADERS += qwinwidget.h \
     sleekwindowclass.h \
-    sleekwindow_global.h \
     sleekborderless.h
 }
 
@@ -35,7 +34,8 @@ SOURCES += \
     sleekwindow.cpp
 
 HEADERS += \
-    sleekwindow.h
+    sleekwindow.h \
+    libsleek_global.h
 
 unix {
     target.path = /usr/lib

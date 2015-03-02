@@ -3,8 +3,9 @@
 
 #include "Windows.h"
 #include <QString>
+#include "libsleek_global.h"
 
-class SleekWindowClass
+class LIBSLEEKSHARED_EXPORT SleekWindowClass
 {
 public:
     static SleekWindowClass& Instance() {
@@ -17,11 +18,11 @@ public:
 
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 
-private:
     SleekWindowClass();
     SleekWindowClass(SleekWindowClass const&);
     SleekWindowClass& operator=(SleekWindowClass const&);
     ~SleekWindowClass();
+private:
 
     HBRUSH _ivoryBrush;
     HBRUSH _graphiteBrush;
