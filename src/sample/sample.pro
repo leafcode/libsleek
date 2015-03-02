@@ -22,7 +22,7 @@ FORMS    += \
     testwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../libsleek/release/ -llibsleek
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../libsleek/debug/ -llibsleek
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../libsleek/debug/ -llibsleekd
 else:unix: LIBS += -L$$OUT_PWD/../libsleek/ -llibsleek
 
 INCLUDEPATH += $$PWD/../libsleek

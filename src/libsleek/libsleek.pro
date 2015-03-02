@@ -6,10 +6,17 @@
 
 QT += core gui widgets
 
-TARGET = libsleek
 TEMPLATE = lib
 
 DEFINES += LIBSLEEK_LIBRARY
+CONFIG += debug_and_release
+CONFIG += build_all
+
+CONFIG(debug, debug|release) {
+    TARGET = libsleekd
+} else {
+    TARGET = libsleek
+}
 
 win32 {
 LIBS += gdi32.lib dwmapi.lib
