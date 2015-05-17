@@ -1,11 +1,14 @@
 #include "testwindow.h"
 
 TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
-    : SleekWindow(app, "TestWindow", parent)
+    : SleekWindow(app, "TestWindow", parent), hasParent(false)
 {
     ui.setupUi(getMainPanel());
     if (parent)
+    {
         centerParent();
+        hasParent = true;
+    }
     else
         centerPrimaryScreen();
     connectSignals();
@@ -23,6 +26,12 @@ void TestWindow::connectSignals()
 
 void TestWindow::slot_buttonPushed()
 {
+    if (hasParent)
+    {
+        close();
+        return;
+    }
+
     TestWindow* testWindow = new TestWindow(_app, this);
     testWindow->show();
 }

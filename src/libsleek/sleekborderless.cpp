@@ -18,6 +18,7 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     mainPanel->setObjectName( "mainPanel" );
 
     //titleWidget.setStyleSheet("background-color:pink;");
+    _titleLayout.setObjectName("titleLayout");
     _titleLayout.setSpacing( 0 );
     _titleLayout.setContentsMargins(0, 0, 0, 0);
     _titleLayout.setMargin(0);

@@ -208,8 +208,8 @@ void SleekWindow::show()
 void SleekWindow::close()
 {
     EnableWindow(_parenthWnd, TRUE);
-    _sleekBorderless->close();
     DestroyWindow(_hWnd);
+    _sleekBorderless->close();
 }
 
 void SleekWindow::hide() {

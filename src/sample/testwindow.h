@@ -17,6 +17,7 @@ public slots:
 private:
     Ui::TestWindow ui;
     void connectSignals();
+    bool hasParent;
 };
 
 #endif // TESTWINDOW_H
