@@ -30,4 +30,4 @@
 # Qt
 *.user
 *.exp
-build/libsleek/debug/libsleekd.ilk
+build
