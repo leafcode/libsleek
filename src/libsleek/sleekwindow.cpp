@@ -21,7 +21,8 @@ SleekWindow::SleekWindow(QApplication *app, QString& title, bool isMainWindow) :
     _visible( false ),
     _isFirstTime ( true ),
     _app(app),
-    _isMainWindow ( isMainWindow )
+    _isMainWindow ( isMainWindow ),
+    _result(false)
 {
     init(title);
 }
@@ -37,7 +38,8 @@ SleekWindow::SleekWindow(QApplication *app, QString &title, SleekWindow *parent)
     _visible( false ),
     _isFirstTime ( true ),
     _app(app),
-    _isMainWindow ( false )
+    _isMainWindow ( false ),
+    _result(false)
 {
     if (parent)
         _parenthWnd = parent->getHandle();
@@ -218,6 +220,10 @@ bool SleekWindow::isResizeable()
 {
     return _borderlessResizeable ? true : false;
 }
+void SleekWindow::setResult(bool result)
+{
+    _result = result;
+}
 
 void SleekWindow::show()
 {
@@ -241,7 +247,7 @@ bool SleekWindow::exec()
 {
     show();
     _eventLoop.exec(QEventLoop::DialogExec);
-    return true;
+    return _result;
 }
 
 void SleekWindow::slot_closing()

@@ -53,7 +53,6 @@ class QWinWidget : public QWidget
     Q_OBJECT
 public:
     QWinWidget( HWND hParentWnd );
-
     ~QWinWidget();
 
     void show();

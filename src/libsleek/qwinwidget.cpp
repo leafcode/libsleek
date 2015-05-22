@@ -90,6 +90,7 @@ void QWinWidget::init()
 
 QWinWidget::~QWinWidget()
 {
+
 }
 
 /*!

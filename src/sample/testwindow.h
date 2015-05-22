@@ -13,7 +13,8 @@ public:
     ~TestWindow();
 
 public slots:
-    void slot_buttonPushed();
+    void slot_buttonPushed_clicked();
+    void slot_buttonSetResult_clicked();
 
 private:
     Ui::TestWindow ui;

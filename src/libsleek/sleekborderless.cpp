@@ -14,7 +14,6 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     //_windowTitle(this)
 {
     _handle = hWnd;
-
     mainPanel->setObjectName( "mainPanel" );
 
     _titleLayout = new QHBoxLayout();
@@ -104,7 +103,10 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
 
 SleekBorderless::~SleekBorderless()
 {
-
+    delete _verticalLayout;
+    delete _titleLayout;
+    delete _centralWidget;
+    delete _titleWidget;
 }
 
 // Button events
@@ -128,8 +130,6 @@ void SleekBorderless::pushButtonMaximizeClicked() {
 
 void SleekBorderless::pushButtonCloseClicked() {
     emit closing();
-    //parent()->
-    //DestroyWindow(_handle);
 }
 
 bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result) {

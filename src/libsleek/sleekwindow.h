@@ -41,6 +41,7 @@ public:
     void toggleResizeable();
     void toggleMinimize();
     bool isResizeable();
+    void setResult(bool result);
 
     void setSize(const int width, const int height);
     void setMinimumSize( const int width, const int height );
@@ -91,6 +92,7 @@ private:
     bool _minimizeVisible;
     bool _isFirstTime;
     bool _isMainWindow;
+    bool _result;
 
     struct sizeType {
       sizeType() : required( false ), width( 0 ), height( 0 ) {}

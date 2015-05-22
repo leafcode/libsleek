@@ -5,6 +5,7 @@ TestWindow::TestWindow(QApplication *app, bool isMainWindow)
     : SleekWindow(app, QString("TestWindow"), isMainWindow), hasParent(false), child(NULL)
 {
     ui.setupUi(getMainPanel());
+    ui.pushButtonSetResult->setVisible(false);
     centerPrimaryScreen();
     connectSignals();
 }
@@ -19,7 +20,9 @@ TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
         hasParent = true;
     }
     else
+    {
         centerPrimaryScreen();
+    }
     connectSignals();
 }
 
@@ -30,13 +33,20 @@ TestWindow::~TestWindow()
 
 void TestWindow::connectSignals()
 {
-    connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(slot_buttonPushed()));
+    connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(slot_buttonPushed_clicked()));
+    connect(ui.pushButtonSetResult, SIGNAL(clicked()), this, SLOT(slot_buttonSetResult_clicked()));
 }
 
-void TestWindow::slot_buttonPushed()
+void TestWindow::slot_buttonPushed_clicked()
 {
     child = new TestWindow(_app, this);
     qDebug() << child->exec();
     delete child;
 }
+
+void TestWindow::slot_buttonSetResult_clicked()
+{
+    setResult(true);
+}
+
 
