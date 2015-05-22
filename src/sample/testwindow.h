@@ -8,6 +8,7 @@ class TestWindow : public SleekWindow
 {
     Q_OBJECT
 public:
+    TestWindow(QApplication *app, bool isMainWindow = false);
     TestWindow(QApplication *app, SleekWindow *parent = 0);
     ~TestWindow();
 
@@ -16,6 +17,7 @@ public slots:
 
 private:
     Ui::TestWindow ui;
+    TestWindow* child;
     void connectSignals();
     bool hasParent;
 };

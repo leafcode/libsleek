@@ -9,7 +9,8 @@
 #include <QWindow>
 #include <QApplication>
 #include "sleekwindowclass.h"
-SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
+
+SleekWindow::SleekWindow(QApplication *app, QString& title, bool isMainWindow) :
     _mainPanel(new QWidget),
     _parenthWnd(0),
     _hWnd(0),
@@ -18,13 +19,50 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
     _aeroShadow( false ),
     _closed( false ),
     _visible( false ),
-    _isFirstTime ( true )
+    _isFirstTime ( true ),
+    _app(app),
+    _isMainWindow ( isMainWindow )
 {
-    _mainPanel->setStyleSheet("border:none;");
+    init(title);
+}
 
+SleekWindow::SleekWindow(QApplication *app, QString &title, SleekWindow *parent) :
+    _mainPanel(new QWidget),
+    _parenthWnd(0),
+    _hWnd(0),
+    _borderless( false ),
+    _borderlessResizeable( true ),
+    _aeroShadow( false ),
+    _closed( false ),
+    _visible( false ),
+    _isFirstTime ( true ),
+    _app(app),
+    _isMainWindow ( false )
+{
     if (parent)
         _parenthWnd = parent->getHandle();
 
+    init(title);
+    EnableWindow(_parenthWnd, FALSE);
+
+    if (parent)
+    {
+        toggleMinimize();
+        toggleResizeable();
+    }
+}
+
+SleekWindow::~SleekWindow()
+{
+    //_sleekBorderless->close();
+    DestroyWindow(_hWnd);
+    delete _sleekBorderless;
+    qDebug() << "SleekWindow: DESTRUCT";
+}
+
+void SleekWindow::init(QString& title)
+{
+    _mainPanel->setStyleSheet("border:none;");
     _hWnd = CreateWindow(
                 L"SleekWindowClass",
                 title.toStdWString().c_str(),
@@ -40,19 +78,13 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
     SetWindowLongPtr( _hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>( this ) );
 
     _sleekBorderless = new SleekBorderless(_hWnd, _mainPanel);
-    _app = app;
-    EnableWindow(_parenthWnd, FALSE);
 
-    if (parent)
-    {
-        toggleMinimize();
-        toggleResizeable();
-    }
+    setupSignals();
 }
 
-SleekWindow::~SleekWindow()
+void SleekWindow::setupSignals()
 {
-    DestroyWindow( _hWnd );
+    connect(_sleekBorderless, SIGNAL(closing()), this, SLOT(slot_closing()));
 }
 
 void SleekWindow::centerPrimaryScreen()
@@ -205,11 +237,30 @@ void SleekWindow::show()
     }
 }
 
+bool SleekWindow::exec()
+{
+    show();
+    _eventLoop.exec(QEventLoop::DialogExec);
+    return true;
+}
+
+void SleekWindow::slot_closing()
+{
+    close();
+}
+
 void SleekWindow::close()
 {
+    qDebug() << "CLOSING!";
+    emit closing();
+    _closed = true;
+    _eventLoop.exit();
     EnableWindow(_parenthWnd, TRUE);
-    DestroyWindow(_hWnd);
-    _sleekBorderless->close();
+    hide();
+    if (_isMainWindow)
+        _app->quit();
+    //DestroyWindow(_hWnd);
+    //_sleekBorderless->close();
 }
 
 void SleekWindow::hide() {

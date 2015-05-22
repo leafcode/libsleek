@@ -24,10 +24,12 @@ class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
     };
 
 public:
-    SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
+    SleekWindow(QApplication *app, QString &title, bool isMainWindow = false);
+    SleekWindow(QApplication *app, QString &title, SleekWindow *parent = 0);
     ~SleekWindow();
 
     QWidget *getMainPanel();
+    bool exec();
     void show();
     void close();
 
@@ -62,12 +64,21 @@ public:
     SleekBorderless* getSleekBorderless();
     HWND getHandle();
 
+signals:
+    void closing();
+
+public slots:
+    void slot_closing();
+
 protected:
     QApplication* _app;
 
 private:
+    void setupSignals();
+    void init(QString &title);
     QWidget* _mainPanel;
     SleekBorderless* _sleekBorderless;
+    QEventLoop _eventLoop;
 
     HWND _parenthWnd;
     HWND _hWnd;
@@ -79,6 +90,7 @@ private:
     bool _borderlessResizeable;
     bool _minimizeVisible;
     bool _isFirstTime;
+    bool _isMainWindow;
 
     struct sizeType {
       sizeType() : required( false ), width( 0 ), height( 0 ) {}

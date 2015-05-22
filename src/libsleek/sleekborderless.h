@@ -17,6 +17,9 @@ public:
   void setResizeable(bool isResizeable);
   bool getResizeable();
 
+signals:
+    void closing();
+
 public slots:
     void pushButtonMinimizeClicked();
     void pushButtonMaximizeClicked();
@@ -27,10 +30,10 @@ private:
     bool _isResizeable;
 
 protected:
-    QVBoxLayout _verticalLayout;
-    QHBoxLayout _titleLayout;
-    QWidget _centralWidget;
-    QWidget _titleWidget;
+    QVBoxLayout* _verticalLayout;
+    QHBoxLayout* _titleLayout;
+    QWidget* _centralWidget;
+    QWidget* _titleWidget;
     //QLabel _windowTitle;
 };
 

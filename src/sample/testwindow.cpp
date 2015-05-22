@@ -1,7 +1,16 @@
 #include "testwindow.h"
+#include <QDebug>
+
+TestWindow::TestWindow(QApplication *app, bool isMainWindow)
+    : SleekWindow(app, QString("TestWindow"), isMainWindow), hasParent(false), child(NULL)
+{
+    ui.setupUi(getMainPanel());
+    centerPrimaryScreen();
+    connectSignals();
+}
 
 TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
-    : SleekWindow(app, "TestWindow", parent), hasParent(false)
+    : SleekWindow(app, QString("TestWindow"), parent), hasParent(parent), child(NULL)
 {
     ui.setupUi(getMainPanel());
     if (parent)
@@ -16,7 +25,7 @@ TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
 
 TestWindow::~TestWindow()
 {
-
+    qDebug() << "TestWindow: DESTRUCT";
 }
 
 void TestWindow::connectSignals()
@@ -26,13 +35,8 @@ void TestWindow::connectSignals()
 
 void TestWindow::slot_buttonPushed()
 {
-    if (hasParent)
-    {
-        close();
-        return;
-    }
-
-    TestWindow* testWindow = new TestWindow(_app, this);
-    testWindow->show();
+    child = new TestWindow(_app, this);
+    qDebug() << child->exec();
+    delete child;
 }
 

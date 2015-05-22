@@ -17,11 +17,12 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
 
     mainPanel->setObjectName( "mainPanel" );
 
+    _titleLayout = new QHBoxLayout();
     //titleWidget.setStyleSheet("background-color:pink;");
-    _titleLayout.setObjectName("titleLayout");
-    _titleLayout.setSpacing( 0 );
-    _titleLayout.setContentsMargins(0, 0, 0, 0);
-    _titleLayout.setMargin(0);
+    _titleLayout->setObjectName("titleLayout");
+    _titleLayout->setSpacing( 0 );
+    _titleLayout->setContentsMargins(0, 0, 0, 0);
+    _titleLayout->setMargin(0);
 
     // Window title
     //horizontalLayout->addStretch();
@@ -30,27 +31,27 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     //windowTitle.setStyleSheet( "font-size: 16px; color: rgb(203, 203, 203);" );
     //windowTitle.setAttribute( Qt::WA_TransparentForMouseEvents );
     //horizontalLayout->addWidget( &windowTitle );
-    _titleLayout.addStretch();
+    _titleLayout->addStretch();
 
     // System buttons
     // Minimize
     QPushButton *pushButtonMinimize = new QPushButton( "", this );
     pushButtonMinimize->setObjectName( "pushButtonMinimize" );
-    _titleLayout.addWidget( pushButtonMinimize );
+    _titleLayout->addWidget( pushButtonMinimize );
     QObject::connect( pushButtonMinimize, SIGNAL( clicked() ), this, SLOT( pushButtonMinimizeClicked() ) );
     pushButtonMinimize->setFocusPolicy(Qt::NoFocus);
 
     // Maximize
     QPushButton *pushButtonMaximize = new QPushButton( "", this );
     pushButtonMaximize->setObjectName( "pushButtonMaximize" );
-    _titleLayout.addWidget( pushButtonMaximize );
+    _titleLayout->addWidget( pushButtonMaximize );
     QObject::connect( pushButtonMaximize, SIGNAL( clicked() ), this, SLOT( pushButtonMaximizeClicked() ) );
     pushButtonMaximize->setFocusPolicy(Qt::NoFocus);
 
     //titleLayout Close
     QPushButton *pushButtonClose = new QPushButton( "", this );
     pushButtonClose->setObjectName( "pushButtonClose" );
-    _titleLayout.addWidget( pushButtonClose );
+    _titleLayout->addWidget( pushButtonClose );
     QObject::connect( pushButtonClose, SIGNAL( clicked() ), this, SLOT( pushButtonCloseClicked() ) );
     pushButtonClose->setFocusPolicy(Qt::NoFocus);
 
@@ -61,8 +62,9 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     setLayout(mainGridLayout);
 
     // Central widget
-    _centralWidget.setObjectName( "centralWidget" );
-    _centralWidget.setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    _centralWidget = new QWidget();
+    _centralWidget->setObjectName( "centralWidget" );
+    _centralWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
     // Main panel scroll area
     QScrollArea *scrollArea = new QScrollArea( this );
@@ -73,22 +75,24 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     // Vertical layout example
-    _verticalLayout.setSpacing( 0 );
-    _verticalLayout.setMargin( 0 );
+    _verticalLayout = new QVBoxLayout();
+    _verticalLayout->setSpacing( 0 );
+    _verticalLayout->setMargin( 0 );
     //verticalLayout.setAlignment( Qt::AlignTop );
     //verticalLayout.setAlignment(Qt::AlignCenter);
     //verticalLayout.addLayout( horizontalLayout );
 
     // Show
-    _titleWidget.setObjectName( "titleWidget" );
-    _titleWidget.setLayout( &_titleLayout );
-    _centralWidget.setLayout( &_verticalLayout );
-    scrollArea->setWidget( &_centralWidget );
-    mainGridLayout->addWidget( &_titleWidget );
+    _titleWidget = new QWidget();
+    _titleWidget->setObjectName( "titleWidget" );
+    _titleWidget->setLayout( _titleLayout );
+    _centralWidget->setLayout( _verticalLayout );
+    scrollArea->setWidget( _centralWidget );
+    mainGridLayout->addWidget( _titleWidget );
     //mainGridLayout->addWidget( &centralWidget );
     mainGridLayout->addWidget( scrollArea );
 
-    _verticalLayout.addWidget(mainPanel);
+    _verticalLayout->addWidget(mainPanel);
     scrollArea->setFocusPolicy(Qt::NoFocus);
     mainPanel->setFocusPolicy(Qt::NoFocus);
     setFocusPolicy(Qt::NoFocus);
@@ -116,11 +120,16 @@ void SleekBorderless::pushButtonMaximizeClicked() {
         ShowWindow( getParentWindow(), SW_RESTORE );
     } else {
         ShowWindow( getParentWindow(), SW_MAXIMIZE );
+        QPushButton* pushButtonMaximize = _titleWidget->findChild<QPushButton*>("pushButtonMaximize");
+        if (pushButtonMaximize != _titleWidget->childAt(_titleWidget->mapFromGlobal(QCursor::pos())))
+            pushButtonMaximize->setAttribute(Qt::WA_UnderMouse, false); //To prevent maximize to be highlighted after maximizing the window.
     }
 }
 
 void SleekBorderless::pushButtonCloseClicked() {
-    DestroyWindow(_handle);
+    emit closing();
+    //parent()->
+    //DestroyWindow(_handle);
 }
 
 bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result) {

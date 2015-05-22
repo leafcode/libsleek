@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
         a.setStyleSheet( styleSheet );
     }
 
-    TestWindow testW(&a);
+    TestWindow testW(&a, true);
     testW.show();
 
     return a.exec();
