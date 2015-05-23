@@ -24,8 +24,8 @@ class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
     };
 
 public:
-    SleekWindow(QApplication *app, QString &title, bool isMainWindow = false);
-    SleekWindow(QApplication *app, QString &title, SleekWindow *parent = 0);
+    SleekWindow(QApplication *app, QString title, bool isMainWindow = false);
+    SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
     ~SleekWindow();
 
     QWidget *getMainPanel();

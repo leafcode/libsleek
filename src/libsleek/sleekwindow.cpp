@@ -10,7 +10,7 @@
 #include <QApplication>
 #include "sleekwindowclass.h"
 
-SleekWindow::SleekWindow(QApplication *app, QString& title, bool isMainWindow) :
+SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) :
     _mainPanel(new QWidget),
     _parenthWnd(0),
     _hWnd(0),
@@ -27,7 +27,7 @@ SleekWindow::SleekWindow(QApplication *app, QString& title, bool isMainWindow) :
     init(title);
 }
 
-SleekWindow::SleekWindow(QApplication *app, QString &title, SleekWindow *parent) :
+SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
     _mainPanel(new QWidget),
     _parenthWnd(0),
     _hWnd(0),
