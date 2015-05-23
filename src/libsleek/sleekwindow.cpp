@@ -350,8 +350,21 @@ SleekBorderless* SleekWindow::getSleekBorderless()
 
 
 #else
+SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) :
+    _mainPanel(new QWidget()),
+    _isMainWindow(isMainWindow),
+    _result(false)
+{
+    Q_UNUSED(title);
+
+    this->_app = app;
+    _mainPanel->setObjectName("mainPanel");
+}
+
 SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
-    _mainPanel(new QWidget())
+    _mainPanel(new QWidget()),
+    _isMainWindow(false),
+    _result(false)
 {
     Q_UNUSED(title);
     Q_UNUSED(parent); //Should be used for modal window...
@@ -377,7 +390,20 @@ void SleekWindow::show()
 
 void SleekWindow::close()
 {
+    _eventLoop.exit();
     _mainPanel->close();
+}
+
+bool SleekWindow::exec()
+{
+    show();
+    _eventLoop.exec();
+    return _result;
+}
+
+void SleekWindow::setResult(bool result)
+{
+    _result = result;
 }
 
 void SleekWindow::toggleResizeable()

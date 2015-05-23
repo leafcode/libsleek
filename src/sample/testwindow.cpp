@@ -2,7 +2,8 @@
 #include <QDebug>
 
 TestWindow::TestWindow(QApplication *app, bool isMainWindow)
-    : SleekWindow(app, QString("TestWindow"), isMainWindow), hasParent(false), child(NULL)
+    : SleekWindow(app, QString("TestWindow"), isMainWindow),
+      hasParent(false)
 {
     ui.setupUi(getMainPanel());
     ui.pushButtonSetResult->setVisible(false);
@@ -11,7 +12,8 @@ TestWindow::TestWindow(QApplication *app, bool isMainWindow)
 }
 
 TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
-    : SleekWindow(app, QString("TestWindow"), parent), hasParent(parent), child(NULL)
+    : SleekWindow(app, QString("TestWindow"), parent),
+      hasParent(parent)
 {
     ui.setupUi(getMainPanel());
     if (parent)

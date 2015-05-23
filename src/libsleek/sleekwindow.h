@@ -112,12 +112,16 @@ class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
     Q_OBJECT
 
 public:
+
+    SleekWindow(QApplication *app, QString title, bool isMainWindow = false);
     SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
     ~SleekWindow();
 
     QWidget* getMainPanel();
     void show();
     void close();
+    bool exec();
+    void setResult(bool result);
     void toggleResizeable();
     void setMinimumSize(const int width, const int height);
     void setMaximumSize(const int width, const int height);
@@ -129,6 +133,9 @@ protected:
 
 private:
     QWidget* _mainPanel;
+    bool _isMainWindow;
+    bool _result;
+    QEventLoop _eventLoop;
 };
 
 #endif
