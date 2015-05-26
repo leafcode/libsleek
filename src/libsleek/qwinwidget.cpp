@@ -47,6 +47,8 @@
 #include <QApplication>
 #include <QWindow>
 
+#pragma comment(lib, "user32.lib")
+
 /*!
     \class QWinWidget qwinwidget.h
     \brief The QWinWidget class is a Qt widget that can be child of a
