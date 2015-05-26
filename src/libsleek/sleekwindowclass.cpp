@@ -77,7 +77,8 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
     }
     case WM_CLOSE: {
         qDebug() << "SleekWindowClass: WM_CLOSE RECEIVED!";
-        DestroyWindow(win->getHandle());
+        //DestroyWindow(win->getHandle());
+        win->close();
         break;
     }
     case WM_KEYDOWN: {
