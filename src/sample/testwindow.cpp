@@ -10,6 +10,7 @@ TestWindow::TestWindow(QApplication *app, bool isMainWindow)
     ui.pushButtonSetResult->setVisible(false);
     centerPrimaryScreen();
     connectSignals();
+    app->installEventFilter(this);
 }
 
 TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
@@ -33,6 +34,20 @@ TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
 TestWindow::~TestWindow()
 {
     qDebug() << "TestWindow: DESTRUCT";
+}
+
+bool TestWindow::eventFilter(QObject* /*object (Disable C4100 warning from VS compiler)*/, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if(keyEvent->key() == Qt::Key_Return)
+        {
+            qDebug() << "Return pressed!";
+            return true;
+        }
+    }
+    return false;
 }
 
 void TestWindow::connectSignals()

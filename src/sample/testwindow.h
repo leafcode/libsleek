@@ -12,6 +12,7 @@ public:
     TestWindow(QApplication *app, SleekWindow *parent = 0);
     ~TestWindow();
 
+    bool eventFilter(QObject *, QEvent *event);
 public slots:
     void slot_buttonPushed_clicked();
     void slot_buttonSetResult_clicked();
