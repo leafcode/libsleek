@@ -6,6 +6,7 @@
 #include <windowsx.h>
 #include <windows.h>
 #include <QWindow>
+#include <QDebug>
 
 SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWnd),
     _titleWidget(this),
@@ -110,11 +111,13 @@ SleekBorderless::~SleekBorderless()
 }
 
 // Button events
-void SleekBorderless::pushButtonMinimizeClicked() {
+void SleekBorderless::pushButtonMinimizeClicked()
+{
     ShowWindow( getParentWindow(), SW_MINIMIZE );
 }
 
-void SleekBorderless::pushButtonMaximizeClicked() {
+void SleekBorderless::pushButtonMaximizeClicked()
+{
     WINDOWPLACEMENT wp;
     wp.length = sizeof( WINDOWPLACEMENT );
     GetWindowPlacement( getParentWindow(), &wp );
@@ -128,28 +131,31 @@ void SleekBorderless::pushButtonMaximizeClicked() {
     }
 }
 
-void SleekBorderless::pushButtonCloseClicked() {
+void SleekBorderless::pushButtonCloseClicked()
+{
     emit closing();
 }
 
-bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result) {
-
-
+bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result)
+{
     MSG *message = ( MSG * )msg;
     switch( message->message ) {
     case WM_SYSKEYDOWN: {
-        if ( message->wParam == VK_SPACE ) {
+        if ( message->wParam == VK_SPACE )
+        {
             RECT winrect;
             GetWindowRect( _handle, &winrect );
             TrackPopupMenu( GetSystemMenu( _handle, false ), TPM_TOPALIGN | TPM_LEFTALIGN, winrect.left + 5, winrect.top + 5, 0, _handle, NULL);
             break;
         }
     }
-    case WM_KEYDOWN: {
+    case WM_KEYDOWN:
+    {
         if ( message->wParam == VK_F5 ||
              message->wParam == VK_F6 ||
              message->wParam == VK_F7
-             ) {
+             )
+        {
             SendMessage( _handle, WM_KEYDOWN, message->wParam, message->lParam );
             break;
         }
@@ -207,21 +213,27 @@ bool SleekBorderless::nativeEvent( const QByteArray &, void *msg, long *result) 
 
 void SleekBorderless::mousePressEvent(QMouseEvent *event)
 {
-    if ( event->button() == Qt::LeftButton ) {
+    if ( event->button() == Qt::LeftButton )
+    {
         ReleaseCapture();
         SendMessage( _handle, WM_NCLBUTTONDOWN, HTCAPTION, 0 );
     }
 
     if (_isResizeable)
     {
-        if ( event->type() == QEvent::MouseButtonDblClick ) {
-            if (event -> button() == Qt::LeftButton) {
+        if ( event->type() == QEvent::MouseButtonDblClick )
+        {
+            if (event -> button() == Qt::LeftButton)
+            {
                 WINDOWPLACEMENT wp;
                 wp.length = sizeof( WINDOWPLACEMENT );
                 GetWindowPlacement( getParentWindow(), &wp );
-                if ( wp.showCmd == SW_MAXIMIZE ) {
+                if ( wp.showCmd == SW_MAXIMIZE )
+                {
                     ShowWindow( getParentWindow(), SW_RESTORE );
-                } else {
+                }
+                else
+                {
                     ShowWindow( getParentWindow(), SW_MAXIMIZE );
                 }
             }

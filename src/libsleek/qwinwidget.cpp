@@ -307,7 +307,7 @@ bool QWinWidget::focusNextPrevChild(bool next)
         }
     } else {
         QWidget *nextFocus = curFocus;
-        while (1) {
+        while (1 && nextFocus != 0) {
             nextFocus = nextFocus->nextInFocusChain();
             if (nextFocus->focusPolicy() & Qt::TabFocus) {
                 return QWidget::focusNextPrevChild(true);

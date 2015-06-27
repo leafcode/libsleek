@@ -126,7 +126,7 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
             str += QString( " from %1 (%2)" ).arg( widget->objectName() ).arg(widget->metaObject()->className() );
         str += "\n";
         OutputDebugStringA( str.toLocal8Bit().data() );
-        SetFocus( (HWND)window->winId() );
+        SetFocus( (HWND)win->getSleekBorderless()->winId() );
         break;
     }
 
