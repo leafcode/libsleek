@@ -3,6 +3,7 @@
 
 #include <QMouseEvent>
 #include <QGridLayout>
+#include <memory>
 //#include <QLabel>
 
 #include "qwinwidget.h"
@@ -34,6 +35,11 @@ protected:
     QHBoxLayout* _titleLayout;
     QWidget* _centralWidget;
     QWidget* _titleWidget;
+    QWidget* _mainPanel;
+    //QVBoxLayout* _verticalLayout;
+    //QHBoxLayout* _titleLayout;
+    //QWidget* _centralWidget;
+    //QWidget* _titleWidget;
     //QLabel _windowTitle;
 };
 

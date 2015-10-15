@@ -1,3 +1,4 @@
+
 #include "sleekwindow.h"
 #include <QPushButton>
 #include <QDebug>
@@ -10,8 +11,7 @@
 #include <QApplication>
 #include "sleekwindowclass.h"
 
-SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) :
-    _mainPanel(new QWidget),
+SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : QWidget(),
     _parenthWnd(0),
     _hWnd(0),
     _borderless( false ),
@@ -27,8 +27,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) :
     init(title);
 }
 
-SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
-    _mainPanel(new QWidget),
+SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) : QWidget(parent),
     _parenthWnd(0),
     _hWnd(0),
     _borderless( false ),
@@ -56,15 +55,11 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
 
 SleekWindow::~SleekWindow()
 {
-    //_sleekBorderless->close();
-    DestroyWindow(_hWnd);
-    delete _sleekBorderless;
-    qDebug() << "SleekWindow: DESTRUCT";
+    //qDebug() << "SleekWindowNew: DESTRUCT";
 }
 
 void SleekWindow::init(QString& title)
 {
-    _mainPanel->setStyleSheet("border:none;");
     _hWnd = CreateWindow(
                 L"SleekWindowClass",
                 title.toStdWString().c_str(),
@@ -77,23 +72,22 @@ void SleekWindow::init(QString& title)
 
     if ( !_hWnd ) throw std::runtime_error( "Create window failed." );
 
-    SetWindowLongPtr( _hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>( this ) );
+    SetWindowLongPtr(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
-    _sleekBorderless = new SleekBorderless(_hWnd, _mainPanel);
+    _sleekBorderless = std::make_unique<SleekBorderless>(_hWnd, this);
 
     setupSignals();
 }
 
 void SleekWindow::setupSignals()
 {
-    connect(_sleekBorderless, SIGNAL(closing()), this, SLOT(slot_closing()));
+    connect(_sleekBorderless.get(), SIGNAL(closing()), this, SLOT(slot_closing()));
 }
 
 void SleekWindow::centerPrimaryScreen()
 {
-    int xPos = (GetSystemMetrics(SM_CXSCREEN) - getMainPanel()->width())/2;
-    int yPos = (GetSystemMetrics(SM_CYSCREEN) - getMainPanel()->height())/2;
-
+    int xPos = (GetSystemMetrics(SM_CXSCREEN) - width()) / 2;
+    int yPos = (GetSystemMetrics(SM_CYSCREEN) - height()) / 2;
     SetWindowPos( _hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE );
 }
 
@@ -110,12 +104,10 @@ void SleekWindow::centerParent()
     //qDebug() << "parent width:" << parentWidth << "height:" << parentHeight;
     //qDebug() << "parent left:" << rectParent.left << "top:" << rectParent.top << "right:" << rectParent.right << "bottom:" << rectParent.bottom;;
 
-    int width = getMainPanel()->width();
-    int height = getMainPanel()->height();
     //qDebug() << "child width:" << width << "height:" << height;
 
-    int x = rectParent.left + (parentWidth / 2) - width / 2;
-    int y = rectParent.top + (parentHeight / 2) - height / 2;
+    int x = rectParent.left + (parentWidth / 2) - width() / 2;
+    int y = rectParent.top + (parentHeight / 2) - height() / 2;
 
     RECT screenRect;
     screenRect.left = GetSystemMetrics(SM_XVIRTUALSCREEN);
@@ -129,8 +121,8 @@ void SleekWindow::centerParent()
     // make sure that the dialog box never moves outside of the screen
     if (x < screenRect.left) x = screenRect.left;
     if (y < 0) y = 0;
-    if (x + width > screenWidth) x = screenWidth - width;
-    if (y + height > screenHeight) y = screenHeight - height;
+    if (x + width() > screenWidth) x = screenWidth - width();
+    if (y + height() > screenHeight) y = screenHeight - height();
 
     SetWindowPos( _hWnd, 0, x, y, 0, 0, SWP_FRAMECHANGED | SWP_NOSIZE );
 }
@@ -206,7 +198,7 @@ void SleekWindow::toggleResizeable() {
 
         pushButtonMaximize->setVisible(false);
         _sleekBorderless->setResizeable(false);
-        setMaximumSize(_mainPanel->width(), _mainPanel->height());
+        setMaximumSize(width(), height());
     }
 }
 
@@ -230,7 +222,7 @@ void SleekWindow::show()
     if (_isFirstTime)
     {
         _isFirstTime = false;
-        setSize(_mainPanel->width(), _mainPanel->height());
+        setSize(width(), height());
     }
 
     if (_visible)
@@ -252,21 +244,18 @@ bool SleekWindow::exec()
 
 void SleekWindow::slot_closing()
 {
-    close();
+    close(_isMainWindow);
 }
 
-void SleekWindow::close()
+void SleekWindow::close(bool quit)
 {
-    qDebug() << "CLOSING!";
     emit closing();
     _closed = true;
     _eventLoop.exit();
     EnableWindow(_parenthWnd, TRUE);
     hide();
-    if (_isMainWindow)
-        _app->quit();
-    //DestroyWindow(_hWnd);
-    //_sleekBorderless->close();
+    if (quit)
+        _app->exit();
 }
 
 void SleekWindow::hide() {
@@ -345,24 +334,22 @@ bool SleekWindow::getBorderlessResizable()
 
 SleekBorderless* SleekWindow::getSleekBorderless()
 {
-    return _sleekBorderless;
+    return _sleekBorderless.get();
 }
 
-
 #else
-SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) :
-    _mainPanel(new QWidget()),
+
+SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : QWidget(0)
     _isMainWindow(isMainWindow),
     _result(false)
 {
     Q_UNUSED(title);
 
     this->_app = app;
-    _mainPanel->setObjectName("mainPanel");
+    setObjectName("mainPanel");
 }
 
-SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) :
-    _mainPanel(new QWidget()),
+SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) : QWidget(parent)
     _isMainWindow(false),
     _result(false)
 {
@@ -375,7 +362,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
     //    _mainPanel = new QWidget();
 
     this->_app = app;
-    _mainPanel->setObjectName("mainPanel");
+    setObjectName("mainPanel");
 }
 
 SleekWindow::~SleekWindow()
@@ -385,13 +372,13 @@ SleekWindow::~SleekWindow()
 
 void SleekWindow::show()
 {
-    _mainPanel->show();
+    QWidget::show();
 }
 
-void SleekWindow::close()
+void SleekWindow::close(bool quit)
 {
     _eventLoop.exit();
-    _mainPanel->close();
+    QWidget::close();
 }
 
 bool SleekWindow::exec()
@@ -408,34 +395,29 @@ void SleekWindow::setResult(bool result)
 
 void SleekWindow::toggleResizeable()
 {
-    _mainPanel->setFixedSize(_mainPanel->size());
+    QWidget::setFixedSize(QWidget::size());
 }
 
 void SleekWindow::setMinimumSize(const int width, const int height)
 {
-    _mainPanel->setMinimumSize(width, height);
+    QWidget::setMinimumSize(width, height);
 }
 
 void SleekWindow::setMaximumSize(const int width, const int height)
 {
-    _mainPanel->setMaximumSize(width, height);
+    QWidget::acceptDrops()->setMaximumSize(width, height);
 }
 
 void SleekWindow::centerParent()
 {
-    _mainPanel->move(_mainPanel->window()->frameGeometry().topLeft() +
-        _mainPanel->window()->rect().center() -
-        _mainPanel->window()->rect().center());
+    QWidget::move(QWidget::window()->frameGeometry().topLeft() +
+        QWidget::window()->rect().center() -
+        QWidget::window()->rect().center());
 }
 
 void SleekWindow::centerPrimaryScreen()
 {
-    _mainPanel->move(QApplication::desktop()->screen()->rect().center() - _mainPanel->rect().center());
+    QWidget::move(QApplication::desktop()->screen()->rect().center() - QWidget::rect().center());
 }
 
 #endif
-
-QWidget *SleekWindow::getMainPanel()
-{
-    return _mainPanel;
-}

@@ -1,5 +1,5 @@
-#ifndef SLEEKWINDOW_H
-#define SLEEKWINDOW_H
+#ifndef SLEEKWINDOWNEW_H
+#define SLEEKWINDOWNEW_H
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -12,7 +12,7 @@
 #include "qwinwidget.h"
 #include "sleekborderless.h"
 
-class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
+class LIBSLEEKSHARED_EXPORT SleekWindow : public QWidget
 {
     Q_OBJECT
 
@@ -28,10 +28,9 @@ public:
     SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
     ~SleekWindow();
 
-    QWidget *getMainPanel();
     bool exec();
     void show();
-    void close();
+    void close(bool quit = false);
 
     void initializePosition();
     void hide();
@@ -77,8 +76,7 @@ protected:
 private:
     void setupSignals();
     void init(QString &title);
-    QWidget* _mainPanel;
-    SleekBorderless* _sleekBorderless;
+    std::unique_ptr<SleekBorderless> _sleekBorderless;
     QEventLoop _eventLoop;
 
     HWND _parenthWnd;
@@ -107,7 +105,7 @@ private:
 
 #else
 
-class LIBSLEEKSHARED_EXPORT SleekWindow : public QObject
+class LIBSLEEKSHARED_EXPORT SleekWindow : public QWidget
 {
     Q_OBJECT
 
@@ -117,9 +115,8 @@ public:
     SleekWindow(QApplication *app, QString title, SleekWindow *parent = 0);
     ~SleekWindow();
 
-    QWidget* getMainPanel();
     void show();
-    void close();
+    void close(bool quit = false);
     bool exec();
     void setResult(bool result);
     void toggleResizeable();
@@ -132,7 +129,6 @@ protected:
     QApplication* _app;
 
 private:
-    QWidget* _mainPanel;
     bool _isMainWindow;
     bool _result;
     QEventLoop _eventLoop;
@@ -140,4 +136,4 @@ private:
 
 #endif
 
-#endif // SLEEKWINDOW_H
+#endif // SLEEKWINDOWNEW_H

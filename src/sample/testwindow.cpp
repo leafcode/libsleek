@@ -3,10 +3,9 @@
 
 TestWindow::TestWindow(QApplication *app, bool isMainWindow)
     : SleekWindow(app, QString("TestWindow"), isMainWindow),
-    hasParent(false),
-    child(nullptr)
+    hasParent(false)
 {
-    ui.setupUi(getMainPanel());
+    ui.setupUi(this);
     ui.pushButtonSetResult->setVisible(false);
     centerPrimaryScreen();
     connectSignals();
@@ -15,10 +14,9 @@ TestWindow::TestWindow(QApplication *app, bool isMainWindow)
 
 TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
     : SleekWindow(app, QString("TestWindow"), parent),
-    hasParent(parent),
-    child(nullptr)
+    hasParent(parent)
 {
-    ui.setupUi(getMainPanel());
+    ui.setupUi(this);
     if (parent)
     {
         centerParent();
@@ -33,7 +31,7 @@ TestWindow::TestWindow(QApplication *app, SleekWindow *parent)
 
 TestWindow::~TestWindow()
 {
-    qDebug() << "TestWindow: DESTRUCT";
+    //qDebug() << "TestWindow: DESTRUCT";
 }
 
 bool TestWindow::eventFilter(QObject* /*object (Disable C4100 warning from VS compiler)*/, QEvent *event)
@@ -58,9 +56,8 @@ void TestWindow::connectSignals()
 
 void TestWindow::slot_buttonPushed_clicked()
 {
-    child = new TestWindow(_app, this);
+    auto child = std::make_unique<TestWindow>(_app, this);
     qDebug() << child->exec();
-    delete child;
 }
 
 void TestWindow::slot_buttonSetResult_clicked()

@@ -41,6 +41,7 @@ SleekWindowClass::SleekWindowClass() :
 
 SleekWindowClass::~SleekWindowClass()
 {
+    //qDebug() << "SleekWindowClass: DESTRUCT";
     DeleteObject(_graphiteBrush);
     DeleteObject(_ivoryBrush);
     UnregisterClass(L"SleekWindowClass", _hInstance);
@@ -67,8 +68,6 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
     SleekWindow *win = reinterpret_cast<SleekWindow*>( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
     if ( !win ) return DefWindowProc( hWnd, message, wParam, lParam );
 
-    QWidget *window = win->getMainPanel();
-
     switch ( message ) {
     case WM_DESTROY: {
         qDebug() << "SleekWindowClass: WM_DESTROY RECEIVED!";
@@ -84,24 +83,14 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
     case WM_KEYDOWN: {
         switch ( wParam ) {
         case VK_F5: {
-            qDebug() << window->childAt(window->mapFromGlobal(QCursor::pos()));
-            break;
-        }
-        case VK_F6: {
-            win->toggleShadow();
-            win->toggleBorderless();
-            SetFocus( (HWND)window->winId() );
-            break;
-        }
-        case VK_F7: {
-            win->toggleShadow();
+            qDebug() << win->childAt(win->mapFromGlobal(QCursor::pos()));
             break;
         }
         }
 
         if ( wParam != VK_TAB ) return DefWindowProc( hWnd, message, wParam, lParam );
 
-        SetFocus( (HWND)window->winId() );
+        SetFocus( (HWND)win->winId() );
         break;
     }
 
@@ -120,12 +109,12 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
     }
 
     case WM_SETFOCUS: {
-        QString str( "Got focus" );
-        QWidget *widget = QWidget::find( ( WId )HWND( wParam ) );
-        if ( widget )
-            str += QString( " from %1 (%2)" ).arg( widget->objectName() ).arg(widget->metaObject()->className() );
-        str += "\n";
-        OutputDebugStringA( str.toLocal8Bit().data() );
+        //QString str( "Got focus" );
+        //QWidget *widget = QWidget::find( ( WId )HWND( wParam ) );
+        //if ( widget )
+        //    str += QString( " from %1 (%2)" ).arg( widget->objectName() ).arg(widget->metaObject()->className() );
+        //str += "\n";
+        //OutputDebugStringA( str.toLocal8Bit().data() );
         SetFocus( (HWND)win->getSleekBorderless()->winId() );
         break;
     }
@@ -140,13 +129,13 @@ LRESULT CALLBACK SleekWindowClass::WndProc( HWND hWnd, UINT message, WPARAM wPar
     }
 
     case WM_KILLFOCUS: {
-        QString str( "Lost focus" );
-        QWidget *widget = QWidget::find( (WId)HWND( wParam ) );
-        if ( widget )
-            str += QString( " to %1 (%2)" ).arg( widget->objectName() ).arg(widget->metaObject()->className() );
-        str += "\n";
+        //QString str( "Lost focus" );
+        //QWidget *widget = QWidget::find( (WId)HWND( wParam ) );
+        //if ( widget )
+        //    str += QString( " to %1 (%2)" ).arg( widget->objectName() ).arg(widget->metaObject()->className() );
+        //str += "\n";
 
-        OutputDebugStringA( str.toLocal8Bit().data() );
+        //OutputDebugStringA( str.toLocal8Bit().data() );
         break;
     }
     case WM_NCHITTEST: {

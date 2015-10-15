@@ -34,8 +34,8 @@ SOURCES += \
     sleekwindow.cpp
 
 HEADERS += \
-    sleekwindow.h \
-    libsleek_global.h
+    libsleek_global.h \
+    sleekwindow.h
 
 unix {
     target.path = /usr/lib

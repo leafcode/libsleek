@@ -3,6 +3,7 @@
 
 #include "sleekwindow.h"
 #include "ui_testwindow.h"
+#include <memory>
 
 class TestWindow : public SleekWindow
 {
@@ -19,7 +20,6 @@ public slots:
 
 private:
     Ui::TestWindow ui;
-    TestWindow* child;
     void connectSignals();
     bool hasParent;
 };

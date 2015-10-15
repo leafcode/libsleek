@@ -9,13 +9,12 @@
 #include <QDebug>
 
 SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWnd),
-    _titleWidget(this),
-    _centralWidget(this),
     _isResizeable(true)
     //_windowTitle(this)
 {
     _handle = hWnd;
-    mainPanel->setObjectName( "mainPanel" );
+    _mainPanel = mainPanel;
+    _mainPanel->setObjectName( "mainPanel" );
 
     _titleLayout = new QHBoxLayout();
     //titleWidget.setStyleSheet("background-color:pink;");
@@ -62,7 +61,7 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     setLayout(mainGridLayout);
 
     // Central widget
-    _centralWidget = new QWidget();
+    _centralWidget = new QWidget(this);
     _centralWidget->setObjectName( "centralWidget" );
     _centralWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
@@ -83,7 +82,7 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     //verticalLayout.addLayout( horizontalLayout );
 
     // Show
-    _titleWidget = new QWidget();
+    _titleWidget = new QWidget(this);
     _titleWidget->setObjectName( "titleWidget" );
     _titleWidget->setLayout( _titleLayout );
     _centralWidget->setLayout( _verticalLayout );
@@ -92,9 +91,9 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
     //mainGridLayout->addWidget( &centralWidget );
     mainGridLayout->addWidget( scrollArea );
 
-    _verticalLayout->addWidget(mainPanel);
+    _verticalLayout->addWidget(_mainPanel);
     scrollArea->setFocusPolicy(Qt::NoFocus);
-    mainPanel->setFocusPolicy(Qt::NoFocus);
+    _mainPanel->setFocusPolicy(Qt::NoFocus);
     setFocusPolicy(Qt::NoFocus);
     show();
 
@@ -104,10 +103,8 @@ SleekBorderless::SleekBorderless(HWND hWnd, QWidget *mainPanel) : QWinWidget(hWn
 
 SleekBorderless::~SleekBorderless()
 {
-    delete _verticalLayout;
-    delete _titleLayout;
-    delete _centralWidget;
-    delete _titleWidget;
+    _mainPanel->setParent(0); //To avoid Qt from deleting this as well. (This is the SleekWindow the user of libsleek inherits from.)
+    //qDebug() << "SleekBorderless: DESTRUCT";
 }
 
 // Button events
