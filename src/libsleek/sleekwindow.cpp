@@ -345,7 +345,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : 
 {
     Q_UNUSED(title);
 
-    this->_app = app;
+    _app = app;
     setObjectName("mainPanel");
 }
 
@@ -361,7 +361,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) 
     //else
     //    _mainPanel = new QWidget();
 
-    this->_app = app;
+    _app = app;
     setObjectName("mainPanel");
 }
 
@@ -405,7 +405,7 @@ void SleekWindow::setMinimumSize(const int width, const int height)
 
 void SleekWindow::setMaximumSize(const int width, const int height)
 {
-    QWidget::acceptDrops()->setMaximumSize(width, height);
+    QWidget::setMaximumSize(width, height);
 }
 
 void SleekWindow::centerParent()
