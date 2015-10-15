@@ -339,7 +339,7 @@ SleekBorderless* SleekWindow::getSleekBorderless()
 
 #else
 
-SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : QWidget(0)
+SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : QWidget(0),
     _isMainWindow(isMainWindow),
     _result(false)
 {
@@ -349,7 +349,7 @@ SleekWindow::SleekWindow(QApplication *app, QString title, bool isMainWindow) : 
     setObjectName("mainPanel");
 }
 
-SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) : QWidget(parent)
+SleekWindow::SleekWindow(QApplication *app, QString title, SleekWindow *parent) : QWidget(parent),
     _isMainWindow(false),
     _result(false)
 {
