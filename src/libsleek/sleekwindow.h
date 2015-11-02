@@ -1,5 +1,5 @@
-#ifndef SLEEKWINDOWNEW_H
-#define SLEEKWINDOWNEW_H
+#ifndef SLEEKWINDOW_H
+#define SLEEKWINDOW_H
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -136,4 +136,4 @@ private:
 
 #endif
 
-#endif // SLEEKWINDOWNEW_H
+#endif // SLEEKWINDOW_H
