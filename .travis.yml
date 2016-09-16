@@ -1,5 +1,4 @@
 before_install:
-before_install:
  - sudo add-apt-repository ppa:beineri/opt-qt57 -y
  - sudo apt-get update -qq
 install:
