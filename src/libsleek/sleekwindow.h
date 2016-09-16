@@ -35,6 +35,8 @@ public:
     void initializePosition();
     void hide();
     bool isVisible();
+    void setBorderless();
+    void setShadow();
     void toggleBorderless();
     void toggleShadow();
     void toggleResizeable();

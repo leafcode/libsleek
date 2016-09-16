@@ -60,6 +60,8 @@ SleekWindow::~SleekWindow()
 
 void SleekWindow::init(QString& title)
 {
+    _borderless = true;
+    _aeroShadow = true;
     _hWnd = CreateWindow(
                 L"SleekWindowClass",
                 title.toStdWString().c_str(),
@@ -132,12 +134,10 @@ HWND SleekWindow::getHandle()
     return _hWnd;
 }
 
-void SleekWindow::toggleBorderless()
+void SleekWindow::setBorderless()
 {
     if (_visible)
     {
-        _borderless = !_borderless;
-
         Style newStyle;
         if (_borderless && _borderlessResizeable)
         {
@@ -154,25 +154,40 @@ void SleekWindow::toggleBorderless()
 
         SetWindowLongPtr( _hWnd, GWL_STYLE, static_cast<LONG>( newStyle ) );
         if ( _borderless ) {
-            toggleShadow();
+            setShadow();
         }
 
         //redraw frame
         SetWindowPos( _hWnd, 0, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE );
-        show();
+        ShowWindow( _hWnd, SW_SHOW );
     }
 }
 
-void SleekWindow::toggleShadow() {
-    if ( _borderless ) {
-        _aeroShadow = !_aeroShadow;
+void SleekWindow::setShadow()
+{
+    if ( _borderless )
+    {
         const MARGINS shadow_on = { 1, 1, 1, 1 };
         const MARGINS shadow_off = { 0, 0, 0, 0 };
         DwmExtendFrameIntoClientArea( _hWnd, ( _aeroShadow ) ? ( &shadow_on ) : ( &shadow_off ) );
     }
 }
 
-void SleekWindow::toggleResizeable() {
+void SleekWindow::toggleBorderless()
+{
+    _borderless = !_borderless;
+    setBorderless();
+}
+
+void SleekWindow::toggleShadow()
+{
+
+    _aeroShadow = !_aeroShadow;
+    setShadow();
+}
+
+void SleekWindow::toggleResizeable()
+{
     _borderlessResizeable = !_borderlessResizeable;
 
     QPushButton *pushButtonMaximize = _sleekBorderless->findChild<QPushButton*>( "pushButtonMaximize" );
@@ -221,18 +236,11 @@ void SleekWindow::show()
 {
     if (_isFirstTime)
     {
-        _isFirstTime = false;
         setSize(width(), height());
+        _isFirstTime = false;
     }
-
-    if (_visible)
-        ShowWindow( _hWnd, SW_SHOW );
-    else
-    {
-        ShowWindow( _hWnd, SW_SHOW );
-        _visible = true;
-        toggleBorderless();
-    }
+    _visible = true;
+    setBorderless();
 }
 
 bool SleekWindow::exec()
